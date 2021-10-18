@@ -1,4 +1,4 @@
-package com.course.practicalJava.com.course.practicalJava.api.server;
+package com.course.practicalJava.api.server;
 
 import com.course.practicalJava.entity.Car;
 import com.course.practicalJava.service.CarService;

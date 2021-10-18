@@ -1,4 +1,4 @@
-package com.course.practicalJava.com.course.practicalJava.api;
+package com.course.practicalJava.api;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
