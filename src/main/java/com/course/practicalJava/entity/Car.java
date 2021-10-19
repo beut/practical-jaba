@@ -1,8 +1,15 @@
 package com.course.practicalJava.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import java.time.LocalDate;
 import java.util.List;
 
+//@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Car {
 
     private String brand;
@@ -10,8 +17,55 @@ public class Car {
     private String type;
     private int price;
     private boolean available;
+    @JsonFormat(pattern = "dd-MM-yyyy", timezone="europe/london")
     private LocalDate firstReleaseDate;
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private List<String> additionalFeatures;
+    @JsonUnwrapped
+    private Engine engine;
+    private List<Tire> tires;
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private String secretFeature;
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "brand='" + brand + '\'' +
+                ", color='" + color + '\'' +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", available=" + available +
+                ", firstReleaseDate=" + firstReleaseDate +
+                ", additionalFeatures=" + additionalFeatures +
+                ", engine=" + engine +
+                ", tires=" + tires +
+                ", secretFeature='" + secretFeature + '\'' +
+                '}';
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public String getSecretFeature() {
+        return secretFeature;
+    }
+
+    public void setSecretFeature(String secretFeature) {
+        this.secretFeature = secretFeature;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public List<Tire> getTires() {
+        return tires;
+    }
+
+    public void setTires(List<Tire> tires) {
+        this.tires = tires;
+    }
 
     public List<String> getAdditionalFeatures() {
         return additionalFeatures;
@@ -49,18 +103,6 @@ public class Car {
         this.brand = brand;
         this.color = color;
         this.type = type;
-    }
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "brand='" + brand + '\'' +
-                ", color='" + color + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", available=" + available +
-                ", firstReleaseDate=" + firstReleaseDate +
-                '}';
     }
 
     public Car() {
