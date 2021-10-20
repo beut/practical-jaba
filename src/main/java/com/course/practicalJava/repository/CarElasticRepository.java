@@ -1,6 +1,8 @@
 package com.course.practicalJava.repository;
 
 import com.course.practicalJava.entity.Car;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +13,7 @@ import java.util.List;
 @Repository
 public interface CarElasticRepository extends ElasticsearchRepository<Car, String> {
 
-    public List<Car> findByBrandAndColor(String brand, String color );
+     Page<Car> findByBrandAndColor(String brand, String color, Pageable pageable);
 
-    public List<Car> findByFirstReleaseDateAfter(LocalDate date);
+     List<Car> findByFirstReleaseDateAfter(LocalDate date);
 }
