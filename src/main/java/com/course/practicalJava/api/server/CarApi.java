@@ -2,6 +2,7 @@ package com.course.practicalJava.api.server;
 
 import com.course.practicalJava.api.sersponse.ErrorResponse;
 import com.course.practicalJava.entity.Car;
+import com.course.practicalJava.exception.IllegalApiParamException;
 import com.course.practicalJava.repository.CarElasticRepository;
 import com.course.practicalJava.service.CarService;
 import org.apache.commons.lang3.StringUtils;
@@ -132,6 +133,11 @@ public class CarApi {
 
         }
 
+        if (StringUtils.isNumeric(brand)) {
+
+            throw new IllegalApiParamException("invalid brand: " + brand);
+        }
+
 
         PageRequest pageable = PageRequest.of(page, size);
         return carElasticRepository.findByBrandAndColor(brand, color, pageable).getContent();
@@ -156,7 +162,15 @@ public class CarApi {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(value = IllegalApiParamException.class)
+    private ResponseEntity<ErrorResponse> handleIllegalApiParamException(IllegalApiParamException e) {
 
+        String message = "exception Api Param, " + e.getMessage();
+        LOG.warn(message);
+
+        ErrorResponse errorResponse = new ErrorResponse(message, LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
 
 }
