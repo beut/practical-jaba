@@ -1,6 +1,6 @@
 package com.course.practicalJava.api.server;
 
-import com.course.practicalJava.api.sersponse.ErrorResponse;
+import com.course.practicalJava.api.response.ErrorResponse;
 import com.course.practicalJava.entity.Car;
 import com.course.practicalJava.exception.IllegalApiParamException;
 import com.course.practicalJava.repository.CarElasticRepository;
@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -150,26 +149,6 @@ public class CarApi {
     public List<Car> findCarsReleasedAfter(@RequestParam(name = "first_release_date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate firstReleaseDate) {
         return carElasticRepository.findByFirstReleaseDateAfter(firstReleaseDate);
 
-    }
-
-@ExceptionHandler(value = IllegalArgumentException.class)
-    private ResponseEntity<ErrorResponse> handleInvalidColorException(IllegalArgumentException e) {
-
-        String message = "exception, " + e.getMessage();
-        LOG.warn(message);
-
-        ErrorResponse errorResponse = new ErrorResponse(message, LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
-
-    @ExceptionHandler(value = IllegalApiParamException.class)
-    private ResponseEntity<ErrorResponse> handleIllegalApiParamException(IllegalApiParamException e) {
-
-        String message = "exception Api Param, " + e.getMessage();
-        LOG.warn(message);
-
-        ErrorResponse errorResponse = new ErrorResponse(message, LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
 

@@ -1,4 +1,4 @@
-package com.course.practicalJava.api.sersponse;
+package com.course.practicalJava.api.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
