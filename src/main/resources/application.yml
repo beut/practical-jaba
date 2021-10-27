@@ -1,5 +1,15 @@
 server:
   port: 8001
+management:
+  metrics:
+    export:
+      elastic:
+        step: 30s
+        host: http://localhost:9200
+springdoc:
+  swagger-ui:
+    supported-submit-methods: get
+
 #spring:
 #  jackson:
 #    property-naming-strategy: SNAKE_CASE

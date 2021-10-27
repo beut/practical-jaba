@@ -1,5 +1,7 @@
 package com.course.practicalJava.api.server;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +15,13 @@ import java.time.LocalTime;
 
 @RestController
 @RequestMapping(value = "/api")
-
+@Tag(name = "Default Rest Api", description = "Documentation for default rest api")
 public class DefaultRestApi {
 
     private Logger LOG = LoggerFactory.getLogger(DefaultRestApi.class);
 
     @RequestMapping(value = "/welcome")
+    @Operation(summary = "Welcome", description = "Default rest api, welcome method")
     public String welcome() {
 //        System.out.println(StringUtils.join("Welcome", " Idea", "JS"));
         LOG.info(StringUtils.join("Welcome", " Idea", "JS"));

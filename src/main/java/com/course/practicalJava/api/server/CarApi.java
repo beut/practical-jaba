@@ -5,6 +5,11 @@ import com.course.practicalJava.entity.Car;
 import com.course.practicalJava.exception.IllegalApiParamException;
 import com.course.practicalJava.repository.CarElasticRepository;
 import com.course.practicalJava.service.CarService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +41,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 @RequestMapping(value = "/api/car/v1")
+@Tag(name = "Car Api", description = "documentation for Car API")
 public class CarApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(CarApi.class);
@@ -51,7 +57,8 @@ public class CarApi {
     }
 
     @PostMapping(value = "/echo", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String echo(@RequestBody Car car) {
+    @Operation(summary = "Echo car", description = "Echo given car input")
+    public String echo(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Car to be echoed") @RequestBody Car car) {
         LOG.info("Car is {}", car);
         return car.toString();
     }
@@ -75,7 +82,7 @@ public class CarApi {
     public String saveCar(@RequestBody Car car) {
         String id = carElasticRepository.save(car).getId();
 
-        return "Saved with id: " +id;
+        return "Saved with id: " + id;
     }
 
     @GetMapping(value = "/{id}")
@@ -89,7 +96,7 @@ public class CarApi {
 
         updatedCar.setId(carId);
         String id = carElasticRepository.save(updatedCar).getId();
-        return "updated car with id "+id;
+        return "updated car with id " + id;
 
     }
 
@@ -102,17 +109,23 @@ public class CarApi {
     }
 
     @GetMapping(value = "/cars/{brand}/{color}")
-    public ResponseEntity<Object> findCarsByPath(@PathVariable String brand, @PathVariable String color, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    @Operation(summary = "Find car by path", description = "Find cars by path")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Everything is OK"),
+            @ApiResponse(responseCode = "400", description = "Bad inpput params")})
+    public ResponseEntity<Object> findCarsByPath(@Parameter(name = "Brand to be find")@PathVariable String brand,
+                                                 @Parameter(name = "Color to be find", example = "White")@PathVariable String color,
+                                                 @Parameter(name = "Page number")@RequestParam(defaultValue = "0") int page,
+                                                 @Parameter(name = "Number of items per page")@RequestParam(defaultValue = "10") int size) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SERVER, "Spring");
         headers.add("X-Custom-Header", "Custom header response");
 
 
-
         //jesli nieprawidlowy kolor -> zwroc http 400
         if (StringUtils.isNumeric(color)) {
-            ErrorResponse errorResponse = new ErrorResponse("invalid color "+color, LocalDateTime.now());
+            ErrorResponse errorResponse = new ErrorResponse("invalid color " + color, LocalDateTime.now());
             return new ResponseEntity<>(errorResponse, headers, HttpStatus.BAD_REQUEST);
         }
 
